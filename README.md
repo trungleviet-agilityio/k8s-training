@@ -1,10 +1,19 @@
-# Kubernetes Learning Repo
+# Kubernetes Learning Repository
 
-This repository tracks my Kubernetes learning journey:
+This repository contains my step-by-step Kubernetes learning journey.
 
-- **docs/** – training plan, notes, and diagrams
-- **exercises/** – topic-based YAML manifests (pods, deployments, services, etc.)
-- **practice/** – larger practice projects (local cluster, CKAD-style labs, EKS)
-- **.github/workflows/** – automation (YAML validation, etc.)
+## Structure
 
-I’ll treat this repo like a real project: branches, pull requests, issues, and milestones.
+- **docs/** — learning plan, daily notes, diagrams  
+- **exercises/** — topic-based Kubernetes manifests  
+- **practice/** — larger practice projects (local → CKAD → EKS)  
+- **.github/workflows/** — automation (YAML validation)  
+
+I follow a milestone-based learning flow:
+- M1 – Kubernetes Fundamentals (Local Cluster)
+- M2 – CKAD Skills
+- M3 – AWS EKS Fundamentals
+- M4 – CI/CD for Kubernetes
+- M5 – Practice Project (Final)
+
+Each folder contains manifests or code created as part of completing the milestone issues.

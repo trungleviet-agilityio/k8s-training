@@ -3,17 +3,18 @@ name: Validate Kubernetes Manifests
 on:
   pull_request:
     paths:
-      - 'exercises/**'
+      - "exercises/**"
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install kubeconform
         run: |
-          curl -L https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+          curl -L https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
           | tar xz
           sudo mv kubeconform /usr/local/bin/
 
