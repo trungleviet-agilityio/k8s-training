@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-pod
+  labels:
+    app: storage-demo
+spec:
+  containers:
+  # Container 1 - writes data to shared volume
+  - name: writer-container
+    image: busybox:1.36
+    command: ["sh", "-c"]
+    args:
+    - |
+      counter=0
+      while true; do
+        echo "Data entry $counter written at $(date)" >> /shared/data.txt
+        counter=$((counter+1))
+        sleep 10
+      done
+    volumeMounts:
+    - name: shared-storage
+      mountPath: /shared
+  # Container 2 - reads data from shared volume
+  - name: reader-container
+    image: busybox:1.36
+    command: ["sh", "-c", "tail -f /shared/data.txt"]
+    volumeMounts:
+    - name: shared-storage
+      mountPath: /shared
+  volumes:
+  - name: shared-storage
+    emptyDir: {}
