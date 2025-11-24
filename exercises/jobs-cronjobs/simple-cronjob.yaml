@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: simple-cronjob
+  labels:
+    app: cronjob-demo
+spec:
+  schedule: "*/1 * * * *"  # Every minute
+  jobTemplate:
+    spec:
+      completions: 1
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: cronjob-demo
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: cronjob-container
+            image: busybox:1.36
+            command: ["sh", "-c"]
+            args:
+            - echo "CronJob executed at $(date)"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
