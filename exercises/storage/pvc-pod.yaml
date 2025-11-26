@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-pod
+  labels:
+    app: storage-demo
+spec:
+  containers:
+  - name: pvc-container
+    image: busybox:1.36
+    command: ["sh", "-c"]
+    args:
+    - |
+      echo "Writing data to persistent volume..." > /data/persistent-data.txt
+      echo "Data written at $(date)" >> /data/persistent-data.txt
+      echo "This data will persist across pod restarts" >> /data/persistent-data.txt
+      echo "Data written successfully. Listing files:" >> /data/persistent-data.txt
+      ls -la /data/ >> /data/persistent-data.txt
+      cat /data/persistent-data.txt
+      sleep 3600
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: /data
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: my-pvc

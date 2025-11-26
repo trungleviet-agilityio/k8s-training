@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+  labels:
+    app: demo
+spec:
+  containers:
+  - name: demo-container
+    image: busybox:1.36
+    command: ["sh", "-c", "env && echo '---' && ls -la /etc/config && echo '---' && ls -la /etc/secret && sleep 3600"]
+    # Using envFrom to load all ConfigMap keys as env vars
+    envFrom:
+    - configMapRef:
+        name: app-configmap
+    # Using secretKeyRef to load specific Secret keys as env vars
+    env:
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: db-secret
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: db-secret
+          key: password
+    # Mount ConfigMap and Secret as volumes
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+      readOnly: true
+    - name: secret-volume
+      mountPath: /etc/secret
+      readOnly: true
+  volumes:
+  - name: config-volume
+    configMap:
+      name: app-configmap
+  - name: secret-volume
+    secret:
+      secretName: db-secret
