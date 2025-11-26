@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shared-volume-pod
+  labels:
+    app: shared-volume
+spec:
+  initContainers:
+  - name: prepare-config
+    image: busybox:1.36
+    command: ['sh', '-c']
+    args:
+    - |
+      echo "Init container: Preparing configuration..."
+      echo "APP_MODE=production" > /shared/config.env
+      echo "LOG_LEVEL=info" >> /shared/config.env
+      echo "Init container: Configuration file created"
+      ls -la /shared/
+    volumeMounts:
+    - name: shared-data
+      mountPath: /shared
+  containers:
+  - name: main-app
+    image: busybox:1.36
+    command: ['sh', '-c', 'cat /shared/config.env && sleep 3600']
+    volumeMounts:
+    - name: shared-data
+      mountPath: /shared
+  volumes:
+  - name: shared-data
+    emptyDir: {}
