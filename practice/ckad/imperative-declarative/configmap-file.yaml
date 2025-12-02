@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config-file
-data:
-  MAX_RETRY: "5"
