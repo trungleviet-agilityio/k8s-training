@@ -5,13 +5,16 @@ metadata:
   labels:
     app: job-demo
 spec:
+  # Number of successful completions required (1 = single task)
   completions: 1
+  # Number of retries before Job is marked as failed
   backoffLimit: 3
   template:
     metadata:
       labels:
         app: job-demo
     spec:
+      # Jobs require OnFailure or Never (not Always)
       restartPolicy: OnFailure
       containers:
       - name: job-container

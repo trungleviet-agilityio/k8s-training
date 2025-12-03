@@ -5,7 +5,11 @@ metadata:
   labels:
     app: cronjob-demo
 spec:
-  schedule: "*/1 * * * *"  # Every minute
+  # Cron schedule: "minute hour day month weekday"
+  # */1 * * * * = Every minute (for testing)
+  # 0 * * * * = Every hour
+  # 0 0 * * * = Every day at midnight
+  schedule: "*/1 * * * *"
   jobTemplate:
     spec:
       completions: 1
@@ -15,6 +19,7 @@ spec:
           labels:
             app: cronjob-demo
         spec:
+          # Jobs require OnFailure or Never (not Always)
           restartPolicy: OnFailure
           containers:
           - name: cronjob-container
@@ -22,5 +27,7 @@ spec:
             command: ["sh", "-c"]
             args:
             - echo "CronJob executed at $(date)"
+  # Keep last 3 successful jobs (for debugging)
   successfulJobsHistoryLimit: 3
+  # Keep last 1 failed job (for debugging)
   failedJobsHistoryLimit: 1

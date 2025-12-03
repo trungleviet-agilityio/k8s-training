@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmap
+  labels:
+    app: api
+data:
+  APP_NAME: api-server
+  LOG_LEVEL: info
+  ENVIRONMENT: production
+  API_PORT: "80"
