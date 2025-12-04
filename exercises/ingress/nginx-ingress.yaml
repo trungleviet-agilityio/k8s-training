@@ -3,14 +3,16 @@ kind: Ingress
 metadata:
   name: nginx-ingress
 spec:
+  # ingressClassName must match the Ingress Controller (nginx for NGINX Ingress Controller)
   ingressClassName: nginx
   rules:
     - http:
         paths:
+          # Path-based routing: root path (/) routes to nginx-service
           - path: /
-            pathType: Prefix
+            pathType: Prefix  # Matches / and all subpaths
             backend:
               service:
-                name: nginx-service
+                name: nginx-service  # Must match the Service name
                 port:
-                  number: 80
+                  number: 80  # Must match Service port
