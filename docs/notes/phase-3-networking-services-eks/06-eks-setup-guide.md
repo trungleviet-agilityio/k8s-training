@@ -8,11 +8,10 @@ This guide provides step-by-step instructions to provision the EKS cluster for P
 2. [Create the Cluster](#2-create-the-cluster)
 3. [Monitor Cluster Creation](#3-monitor-cluster-creation)
 4. [Verify the Cluster](#4-verify-the-cluster)
-5. [Issue #22 Completion Checklist](#41-issue-22-completion-checklist)
-6. [Troubleshooting](#5-troubleshooting)
-7. [Common eksctl Commands](#6-common-eksctl-commands)
-8. [Cleanup](#7-cleanup-important)
-9. [References](#8-references)
+5. [Troubleshooting](#5-troubleshooting)
+6. [Common eksctl Commands](#6-common-eksctl-commands)
+7. [Cleanup](#7-cleanup-important)
+8. [References](#8-references)
 
 ---
 
@@ -154,9 +153,7 @@ kubectl get pods -n kube-system -l k8s-app=aws-node -o wide
 
 **Expected:** Pod IPs should be in the VPC subnet ranges (e.g., 10.0.x.x).
 
----
-
-## 4.1. Issue #22 Completion Checklist
+### Issue #22 Completion Checklist
 
 Before considering Issue #22 complete, verify all items below:
 
