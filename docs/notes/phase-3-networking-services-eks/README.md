@@ -68,6 +68,11 @@ This directory contains detailed documentation for Phase 3, focused on Kubernete
    - Practical examples and use cases
    - Troubleshooting common issues
 
+9. [**Conclusion & Resume Guide**](./09-conclusion-and-resume.md)
+   - Phase 3 completion summary
+   - Step-by-step guide to restart/resume your EKS environment
+   - Cleanup reference
+
 ## Quick Start
 
 **For Local Kubernetes Networking:**
@@ -81,6 +86,7 @@ This directory contains detailed documentation for Phase 3, focused on Kubernete
 3. Learn [Helm basics](./08-helm.md) to understand package management
 4. Install [AWS Load Balancer Controller](./07-alb-controller.md) to enable Ingress → ALB provisioning
 5. Deploy a test application with Ingress to verify ALB creation
+6. See [Conclusion & Resume Guide](./09-conclusion-and-resume.md) for cleanup and restarting instructions
 
 ## Goal
 
