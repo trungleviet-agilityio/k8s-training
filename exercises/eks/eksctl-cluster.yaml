@@ -1,0 +1,145 @@
+# EKS Cluster Configuration for Kubernetes Training
+#
+# Purpose:
+#   Minimal EKS cluster configuration for Phase 3 networking exercises.
+#   Designed for learning and cost-effectiveness with Free Tier eligible resources.
+#
+# Usage:
+#   eksctl create cluster -f exercises/eks/eksctl-cluster.yaml
+#
+# Important Notes:
+#   - Instance type: t3.small (Free Tier eligible, minimum recommended for EKS)
+#   - If not using Free Tier, consider t3.medium or larger for better performance
+#   - Cluster creation takes 15-30 minutes (control plane: ~10 min, node group: ~5-15 min)
+#   - eksctl may timeout after ~30-40 minutes, but cluster creation continues in AWS
+#
+# Kubernetes Version:
+#   - Version 1.29 (check eksctl docs for latest supported versions)
+#   - Node groups must match cluster version
+#
+# Cost Considerations:
+#   - Single NAT Gateway (cost-effective for learning)
+#   - Single node group with 1 node (minimum for functionality)
+#   - CloudWatch logging enabled (may incur charges)
+#
+# See also:
+#   - docs/notes/phase-3-networking-services-eks/06-eks-setup-guide.md
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+# ============================================================================
+# Cluster Metadata
+# ============================================================================
+metadata:
+  name: k8s-training-cluster
+  region: ap-southeast-1
+  version: "1.29"  # Kubernetes version - ensure this is supported by eksctl
+
+# ============================================================================
+# VPC & Networking Configuration
+# ============================================================================
+vpc:
+  # CIDR block for the VPC
+  # eksctl will automatically create public and private subnets within this CIDR
+  cidr: 10.0.0.0/16
+
+  # NAT Gateway Configuration
+  # Single NAT Gateway is cost-effective for learning environments
+  # For production, consider "HighlyAvailable" for multi-AZ redundancy
+  nat:
+    gateway: Single  # Options: Single, HighlyAvailable, Disable
+
+  # Subnet Strategy:
+  # - Public subnets: For load balancers, NAT gateways, and optionally worker nodes
+  # - Private subnets: For worker nodes (security best practice)
+  # eksctl automatically creates subnets across multiple availability zones
+
+# ============================================================================
+# Compute: Managed Node Groups
+# ============================================================================
+managedNodeGroups:
+  # Public Node Group
+  # Nodes in public subnets can have direct internet access via Internet Gateway
+  - name: public-ng
+    # Instance Type Selection:
+    # - t3.small: Free Tier eligible, 2 vCPU, 2GB RAM (minimum for EKS)
+    # - t3.medium: NOT Free Tier eligible, better performance (use if not on Free Tier)
+    # - t3.micro: Free Tier eligible but too small (1 vCPU, 1GB RAM) - NOT recommended
+    instanceType: t3.small
+
+    # Scaling Configuration
+    desiredCapacity: 1  # Start with 1 node for cost efficiency
+    minSize: 1          # Minimum nodes (required for cluster operation)
+    maxSize: 2          # Maximum nodes (can scale up if needed)
+
+    # AMI Family
+    # AmazonLinux2023: Latest Amazon Linux, faster launch times
+    # Alternative: AmazonLinux2 (if compatibility issues arise)
+    amiFamily: AmazonLinux2023
+
+    # Network Placement
+    # Omit privateNetworking to place nodes in public subnets
+    # For production, set privateNetworking: true for better security
+
+    # SSH Access
+    # Disabled for security - enable only if debugging is needed
+    ssh:
+      allow: false
+
+    # Kubernetes Labels
+    # Used for node selection and scheduling
+    labels:
+      role: public-worker
+
+    # AWS Tags
+    # Applied to EC2 instances and other AWS resources
+    tags:
+      Environment: training
+      NodeGroup: public
+      Purpose: learning
+
+  # Private Node Group (Optional)
+  # Uncomment below to add a private node group for production-like setup
+  # Private nodes are more secure but require NAT Gateway for outbound internet
+  # - name: private-ng
+  #   instanceType: t3.medium  # Can use larger instance for private nodes
+  #   desiredCapacity: 2
+  #   minSize: 1
+  #   maxSize: 4
+  #   privateNetworking: true  # Place nodes in private subnets
+  #   ssh:
+  #     allow: false
+  #   labels:
+  #     role: private-worker
+  #   tags:
+  #     Environment: training
+  #     NodeGroup: private
+  #     Purpose: learning
+
+# ============================================================================
+# IAM Configuration
+# ============================================================================
+iam:
+  # IRSA (IAM Roles for Service Accounts)
+  # Enables pods to assume IAM roles using service account annotations
+  # Required for AWS Load Balancer Controller and other AWS service integrations
+  withOIDC: true
+
+  # eksctl automatically creates:
+  # - Cluster Service Role (for EKS control plane)
+  # - Node Group Instance Role (for worker nodes)
+  # - Node Group Instance Profile (links role to EC2 instances)
+
+# ============================================================================
+# Observability: CloudWatch Logging
+# ============================================================================
+cloudWatch:
+  clusterLogging:
+    # Enable all log types for comprehensive debugging
+    # Log types: api, audit, authenticator, controllerManager, scheduler
+    # Note: CloudWatch logging may incur charges
+    enableTypes: ["*"]
+
+    # To enable specific log types only:
+    # enableTypes: ["api", "audit", "authenticator"]

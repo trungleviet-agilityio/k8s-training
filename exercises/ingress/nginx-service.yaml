@@ -5,9 +5,10 @@ metadata:
   labels:
     app: nginx
 spec:
+  # ClusterIP is required for Ingress (Ingress routes to Services, not Pods directly)
   type: ClusterIP
   selector:
-    app: nginx
+    app: nginx  # Must match pod labels from nginx-deployment.yaml
   ports:
     - port: 80
       targetPort: 80
