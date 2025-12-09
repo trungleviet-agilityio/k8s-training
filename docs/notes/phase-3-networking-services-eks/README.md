@@ -52,6 +52,22 @@ This directory contains detailed documentation for Phase 3, focused on Kubernete
    - Common `eksctl` Commands
    - Cleanup instructions
 
+7. [**AWS Load Balancer Controller**](./07-alb-controller.md)
+   - Controller installation with Helm
+   - IAM Roles for Service Accounts (IRSA) setup
+   - Automatic ALB provisioning from Ingress resources
+   - IP Target Mode vs Instance Mode
+   - Common annotations and configuration
+   - Testing and troubleshooting
+
+8. [**Helm - Kubernetes Package Manager**](./08-helm.md)
+   - What is Helm and why use it
+   - Core concepts (Charts, Releases, Repositories, Values)
+   - Installation guide (Helm 3 and Helm 4)
+   - Essential commands reference
+   - Practical examples and use cases
+   - Troubleshooting common issues
+
 ## Quick Start
 
 **For Local Kubernetes Networking:**
@@ -62,6 +78,9 @@ This directory contains detailed documentation for Phase 3, focused on Kubernete
 **For AWS EKS:**
 1. Review [EKS Networking Concepts](./05-eks-networking-concepts.md) for architecture understanding
 2. Follow [EKS Setup Guide](./06-eks-setup-guide.md) to create your cluster
+3. Learn [Helm basics](./08-helm.md) to understand package management
+4. Install [AWS Load Balancer Controller](./07-alb-controller.md) to enable Ingress → ALB provisioning
+5. Deploy a test application with Ingress to verify ALB creation
 
 ## Goal
 
@@ -69,5 +88,7 @@ The goal of this phase is to master Kubernetes networking concepts, enabling you
 - Expose applications using Services and Ingress
 - Control traffic with NetworkPolicies
 - Understand service discovery and DNS
+- Use Helm to manage Kubernetes applications and dependencies
 - Deploy and manage applications on AWS EKS
 - Understand EKS networking architecture (VPC CNI, ENIs, subnets)
+- Provision and manage AWS Application Load Balancers from Kubernetes Ingress resources
